@@ -73,6 +73,6 @@ module.exports = function toReadable (number) {
   }
   return res.trim();
 }
-  };
+ 
 
 
