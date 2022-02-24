@@ -1,76 +1,77 @@
 module.exports = function toReadable (number) {
-const firstNum = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
-const secondNum = ['eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
-const tens = ['twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-const numStr = String(number).split('');
-let str = '';
-
-   if (numStr.length === 1) {
-       numStr.unshift('0', '0');
-   }else if (numStr.length === 2) {
-       numStr.unshift('0');
-   }
-
-   if (number === 0) {
-       str += 'zero';
-   };
-   switch (numStr[0]) {
-       case '1':
-           str += firstNum[0] + ' hundred ';
-           break;
-       case '2':
-           str += firstNum[1] + ' hundred ';
-           break;
-       case '3':
-            str += firstNum[2] + ' hundred ';
-            break;
-        case '4':
-            str += firstNum[3] + ' hundred ';
-            break;
-       case '5':
-            str += firstNum[4] + ' hundred ';
-            break;
-       case '6':
-            str += firstNum[5] + ' hundred ';
-            break;
-   }
-
-
-
-let toReadable = n => {
-    let a = [
-      '', 'one', 'two', 'three', 'four',
-      'five', 'six', 'seven', 'eight', 'nine',
-      'ten', 'eleven', 'twelve', 'thirteen', 'fourteen',
-      'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'
-    ];
-    let b = [
-      '', '', 'twenty', 'thirty', 'forty',
-      'fifty', 'sixty', 'seventy', 'eighty', 'ninety'
-    ];
-    let g = [
-      '', 'thousand'
-    ];
-    
-    let makeGroup = ([ones,tens,huns]) => {
-      return [
-        num(huns) === 0 ? '' : a[huns] + ' hundred ',
-        num(ones) === 0 ? b[tens] : b[tens] && b[tens] + '-' || '',
-        a[tens+ones] || a[ones]
-      ].join('');
-    };
-    
-    
-    if (typeof n === 'number') {
-      return toReadable(String(n));
-  } if (n === '0'){
-      return 'zero';
+  let res = "";
+  let first = [
+      "",
+      "one",
+      "two",
+      "three",
+      "four",
+      "five",
+      "six",
+      "seven",
+      "eight",
+      "nine",
+      "ten",
+      "eleven",
+      "twelve",
+      "thirteen",
+      "fourteen",
+      "fifteen",
+      "sixteen",
+      "seventeen",
+      "eighteen",
+      "nineteen",
+  ];
+  let tens = [
+      "",
+      "",
+      "twenty",
+      "thirty",
+      "forty",
+      "fifty",
+      "sixty",
+      "seventy",
+      "eighty",
+      "ninety",
+  ];
+  let num = number.toString();
+  if (number === 0 || number == "") {
+      return "zero";
   }
-  return comp (chunk(3)) (reverse) (arr(n))
-    .map(makeGroup)
-    .filter(comp(not)(isEmpty))
-    .reverse()
-    .join(' ');
+  if (number < 0) {
+      res = "Error! number < 0";
+  }
+  if (number < 20) {
+      res = first[number];
+  }
+  if (num.length === 2 && number >= 20) {
+      res = tens[num[0]] + " " + first[num[1]];
+  }
+
+
+  if (num.length == 3) {
+      if (num[1] === "0" && num[2] === "0") {
+          res = first[num[0]] + " hundred";
+      } else {
+          res =
+              first[num[0]] +
+              " " +
+              "hundred " +
+              toReadable(+(num[1] + num[2]));
+      }
+  }
+
+  if (num.length === 4) {
+      let finish = +(num[1] + num[2] + num[3]);
+      if (finish === 0) {
+          res = first[num[0]] + " thousand";
+      }
+      if (finish < 100) {
+          res = first[num[0]] + " " + "thousand " + toReadable(finish);
+      }
+      res = first[num[0]] + "thousand " + toReadable(finish);
+  }
+  return res.trim();
 }
   };
 
